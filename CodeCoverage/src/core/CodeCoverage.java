@@ -1,6 +1,10 @@
 package core;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,13 +24,15 @@ import java.util.Set;
 public class CodeCoverage extends PrintStream {
 	private final Set<String> coveredLines = new HashSet<String>();
 	private final PrintStream originalOutputStream = System.out;
+	private final String outputFile;
 	
 	/**
 	 * Changes the output stream to this object.
 	 */
-	public CodeCoverage(){
+	public CodeCoverage(String outputFile){
 		super(System.out);
 		System.setOut(this);
+		this.outputFile = outputFile;
 	}
 	
 	/**
@@ -54,5 +60,25 @@ public class CodeCoverage extends PrintStream {
 	 */
 	public void resetOutputStream() {
 		System.setOut(originalOutputStream);
+	}
+	
+	/**
+	 * Can be used to write the result to a file and will also keep the previous executions as well.
+	 * @param methodName Just an identification and a way to tell when a new round of results began.
+	 * @throws IOException
+	 */
+	public void writeToFile(String methodName){
+		try(FileWriter fw = new FileWriter(outputFile, true);
+			    BufferedWriter bw = new BufferedWriter(fw);
+			    PrintWriter out = new PrintWriter(bw))
+			{
+			out.println(methodName+":");
+			for(String s : getResult()) {
+				out.println(s);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.err.println("Couldn't open output file");
+		}
 	}
 }

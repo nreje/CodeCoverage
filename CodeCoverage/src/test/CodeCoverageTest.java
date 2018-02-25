@@ -2,6 +2,8 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 
 import core.CodeCoverage;
@@ -12,7 +14,7 @@ class CodeCoverageTest {
 	void testRedirectErrorStream() {
 		System.out.println("ERROR 1");
 		System.out.println("#CC# 2");
-		CodeCoverage cc = new CodeCoverage();
+		CodeCoverage cc = new CodeCoverage(null);
 		System.out.println("ERROR 3");
 		System.out.println("#CC# 4");
 		cc.resetOutputStream();
@@ -21,7 +23,7 @@ class CodeCoverageTest {
 	@Test
 	void testGetResult() {
 		System.out.println("#CC# HMM?");
-		CodeCoverage cc = new CodeCoverage();
+		CodeCoverage cc = new CodeCoverage(null);
 		System.out.println("#CC# 2");
 		System.out.println("#CC# 67");
 		
@@ -34,10 +36,17 @@ class CodeCoverageTest {
 	@Test
 	void testResetErrorStream() throws InterruptedException {
 		System.out.println("#CC# 66");
-		CodeCoverage cc = new CodeCoverage();
+		CodeCoverage cc = new CodeCoverage(null);
 		System.out.println("#CC# 2");
 		cc.resetOutputStream();
 		System.out.println("#CC# 3");
+	}
+	
+	@Test
+	void testWriteToFile() throws IOException {
+		CodeCoverage cc = new CodeCoverage("testFile.txt");
+		System.out.println("#CC# testLine");
+		cc.writeToFile("TestMethod");
 	}
 
 }
