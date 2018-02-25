@@ -10,34 +10,34 @@ class CodeCoverageTest {
 	
 	@Test
 	void testRedirectErrorStream() {
-		System.err.println("ERROR 1");
-		System.err.println("#CC# 2");
+		System.out.println("ERROR 1");
+		System.out.println("#CC# 2");
 		CodeCoverage cc = new CodeCoverage();
-		System.err.println("ERROR 3");
-		System.err.println("#CC# 4");
-		cc.resetErrorStream();
+		System.out.println("ERROR 3");
+		System.out.println("#CC# 4");
+		cc.resetOutputStream();
 	}
 
 	@Test
 	void testGetResult() {
-		System.err.println("#CC# HMM?");
+		System.out.println("#CC# HMM?");
 		CodeCoverage cc = new CodeCoverage();
-		System.err.println("#CC# 2");
-		System.err.println("#CC# 67");
+		System.out.println("#CC# 2");
+		System.out.println("#CC# 67");
 		
 		for(String s : cc.getResult()) {
 			System.out.println("Line "+s);
 		}
-		//cc.resetErrorStream();
+		System.out.println("#CC# HMM2?");
 	}
 
 	@Test
 	void testResetErrorStream() throws InterruptedException {
-		System.err.println("#CC# 66");
+		System.out.println("#CC# 66");
 		CodeCoverage cc = new CodeCoverage();
-		System.err.println("#CC# 2");
-		cc.resetErrorStream();
-		System.err.println("#CC# 3");
+		System.out.println("#CC# 2");
+		cc.resetOutputStream();
+		System.out.println("#CC# 3");
 	}
 
 }

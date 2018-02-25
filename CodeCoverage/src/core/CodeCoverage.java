@@ -8,9 +8,9 @@ import java.util.Set;
  * 
  * @author Niklas Reje
  * 
- * Simple Code Coverage Checking Tool™ that redirects the error stream to a custom one that extracts relevant error outputs.
+ * Simple Code Coverage Checking Tool™ that redirects the output stream to a custom one that extracts relevant code coverage outputs.
  * 
- * Write System.err.println("#CC# {line ID}"); where {line ID} is an identifier for some line that you want to check the coverage for.
+ * Write System.out.println("#CC# {line ID}"); where {line ID} is an identifier for some line that you want to check the coverage for.
  * The {line ID} could contain whatever you want so long as it works for you.
  * 
  * Because the lines are kept in a set there are no guarantees that they will come in the order they where put there.
@@ -19,18 +19,18 @@ import java.util.Set;
 
 public class CodeCoverage extends PrintStream {
 	private final Set<String> coveredLines = new HashSet<String>();
-	private final PrintStream originalErrorStream = System.err;
+	private final PrintStream originalOutputStream = System.out;
 	
 	/**
-	 * Changes the error output stream to this object.
+	 * Changes the output stream to this object.
 	 */
 	public CodeCoverage(){
-		super(System.err);
-		System.setErr(this);
+		super(System.out);
+		System.setOut(this);
 	}
 	
 	/**
-	 * Extract error streams that contain "#CC#" in the beginning of the string, otherwise sends it to the normal println function.
+	 * Extract output streams that contain "#CC#" in the beginning of the string, otherwise pass it on to the normal println function.
 	 */
 	@Override
 	public void println(String x) {
@@ -45,14 +45,14 @@ public class CodeCoverage extends PrintStream {
 	 * Get the set with all the covered lines.
 	 */
 	public Set<String> getResult() {
-		resetErrorStream();
+		resetOutputStream();
 		return coveredLines;
 	}
 	
 	/**
-	 * Changes back to the original error output stream. This needs to be called at the end every test method unless getResult() is called.
+	 * Changes back to the original output stream. This should be called at the end every test method unless getResult() is called otherwise the original output stream is lost.
 	 */
-	public void resetErrorStream() {
-		System.setErr(originalErrorStream);
+	public void resetOutputStream() {
+		System.setOut(originalOutputStream);
 	}
 }
